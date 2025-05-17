@@ -22,7 +22,7 @@ export class AuthService {
         const foundUser = data.users.find(user => user.email === email && user.password === password);
         if (foundUser) {
           console.log("User authenticated:", foundUser);
-        
+          // Guarda el usuario en el localStorage
           localStorage.setItem('currentUser', JSON.stringify(foundUser));
           return foundUser;
         }
