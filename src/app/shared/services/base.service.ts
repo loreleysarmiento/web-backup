@@ -6,7 +6,7 @@ import { catchError, Observable, retry, throwError } from 'rxjs';
 export abstract class BaseService<T> {
   protected httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
   protected serverBaseUrl: string = `${environment.serverBaseUrl}`;
-  protected resourceEndpoint: string = '/login';
+  protected resourceEndpoint: string = '/';
   protected http: HttpClient = inject(HttpClient);
 
   protected handleError(error: HttpErrorResponse) {
@@ -15,7 +15,6 @@ export abstract class BaseService<T> {
   }
 
   protected resourcePath(): string {
-
     return `${this.serverBaseUrl.replace(/\/+$/, '')}/${this.resourceEndpoint.replace(/^\/+/, '')}`;
   }
 
@@ -36,7 +35,6 @@ export abstract class BaseService<T> {
     return this.http.post<T>(this.resourcePath(), sanitizedResource, this.httpOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
-
 
   public update(id: number | string, resource: T): Observable<T> {
     return this.http.put<T>(`${this.resourcePath()}/${id}`, resource, this.httpOptions)
