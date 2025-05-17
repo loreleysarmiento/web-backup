@@ -13,30 +13,23 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(username: string, password: string): Observable<User | null> {
-    return this.http.get<User[]>(this.usersUrl).pipe(
-      map(users => {
-        const trimmedUsername = username.trim();
-        const trimmedPassword = password.trim();
+ login(email: string, password: string): Observable<User | null> {
+  const url = `${environment.serverBaseUrl}${environment.userEndpointPath}`;
+  console.log("Login URL:", url);
 
-        const user = users.find(u =>
-          u.userName.trim() === trimmedUsername &&
-          u.password.trim() === trimmedPassword
-        );
+  return this.http.get<User[]>(url).pipe(
+    map((users: User[]) => {
+      const foundUser = users.find(user => user.email === email && user.password === password);
+      if (foundUser) {
+        console.log("User authenticated:", foundUser);
+        return foundUser;
+      }
+      console.warn("Login failed for email:", email);
+      return null;
+    })
+  );
+}
 
-        if (user) {
-          // Almacenar el usuario actual
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          return user;
-        }
-        return null;
-      }),
-      catchError(error => {
-        console.error('Login failed', error);
-        return throwError(() => new Error('Login failed'));
-      })
-    );
-  }
 
   logout() {
     localStorage.removeItem('currentUser');
