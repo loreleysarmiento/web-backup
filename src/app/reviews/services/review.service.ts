@@ -7,25 +7,30 @@ import { environment } from '../../../environments/environment';
 import { Review } from '../model/review.entity';
 import { Movie } from '../../contents/movies/model/movie.entity';
 
+interface DbResponse {
+  reviews: Review[];
+  movies: Movie[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ReviewService {
-  private reviewsUrl = `${environment.serverBaseUrl}${environment.reviewEndPointPath}`;
-  private moviesUrl = `${environment.serverBaseUrl}${environment.movieEndpointPath}`;
+  private reviewsUrl = environment.reviewEndPointPath;
+  private moviesUrl = environment.movieEndpointPath;
 
   constructor(private http: HttpClient) {}
 
   getReviewsByUserId(userId: string): Observable<Review[]> {
-    return this.http.get<Review[]>(`${this.reviewsUrl}?userId=${userId}`);
+    return this.http.get<DbResponse>(this.reviewsUrl).pipe(
+      map((data) => data.reviews.filter(review => review.userId === userId) || [])
+    );
   }
 
   getEnrichedReviews(userId: string): Observable<any[]> {
     return this.getReviewsByUserId(userId).pipe(
       switchMap(reviews => {
-        const contentRequests = reviews.map(review =>
-          this.getMovieById(review.contenidoId)
-        );
+        const contentRequests = reviews.map(review => this.getMovieById(review.contenidoId));
 
         return forkJoin(contentRequests).pipe(
           map((movies) => {
@@ -44,11 +49,14 @@ export class ReviewService {
   }
 
   getMovieById(id: string): Observable<Movie> {
-    return this.http.get<Movie[]>(`${this.moviesUrl}?id=${id}`).pipe(
-      map(movies => movies[0] || {})  // Asume que el API devuelve un array
+    return this.http.get<DbResponse>(this.moviesUrl).pipe(
+      map((data) => data.movies.find(movie => movie.id === id) || {})
     );
   }
+
   getReviewsByMovieId(contenidoId: string): Observable<Review[]> {
-    return this.http.get<Review[]>(`${this.reviewsUrl}?contenidoId=${contenidoId}`);
+    return this.http.get<DbResponse>(this.reviewsUrl).pipe(
+      map((data) => data.reviews.filter(review => review.contenidoId === contenidoId) || [])
+    );
   }
 }
