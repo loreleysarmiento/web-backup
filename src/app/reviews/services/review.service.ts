@@ -5,7 +5,8 @@ import { Observable, forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Review } from '../model/review.entity';
-import{MovieService} from '../../contents/movies/services/movie.service.service';
+import { MovieService } from '../../contents/movies/services/movie.service';
+import { Movie } from '../../contents/movies/model/movie.entity';
 
 interface DbResponse {
   reviews: Review[];
@@ -35,11 +36,11 @@ export class ReviewService {
         return forkJoin(contentRequests).pipe(
           map((movies) => {
             return reviews.map((review, index) => {
-              const movie = movies[index];
+              const movie = movies[index] as Movie;
               return {
                 ...review,
-                contenidoTitulo: movie instanceof Object ? movie.titulo : 'Desconocido',
-                contenidoImagen: movie instanceof Object ? movie.imagen : ''
+                contenidoTitulo: movie.titulo || 'Desconocido',
+                contenidoImagen: movie.imagen || ''
               };
             });
           })
