@@ -9,12 +9,12 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private usersUrl = `${environment.serverBaseUrl}${environment.userEndpointPath}`;
+  private usersUrl = environment.userEndpointPath;
 
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<User | null> {
-    const url = `${environment.serverBaseUrl}${environment.userEndpointPath}`;
+    const url = this.usersUrl;
     console.log("Login URL:", url);
 
     return this.http.get<{ users: User[] }>(url).pipe(
