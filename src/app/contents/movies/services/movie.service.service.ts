@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {environment} from '../../../../environments/environment';
-import {map} from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
+import { map } from 'rxjs/operators';
 import { Movie } from '../model/movie.entity';
 
 interface DbResponse {
@@ -13,13 +13,12 @@ interface DbResponse {
   providedIn: 'root'
 })
 export class MovieService {
-  private baseUrl = `${environment.serverBaseUrl}${environment.movieEndpointPath}`;
+  private moviesUrl = environment.movieEndpointPath;
 
   constructor(private http: HttpClient) {}
 
-
   getMovies(): Observable<Movie[]> {
-    return this.http.get<DbResponse>(this.baseUrl).pipe(
+    return this.http.get<DbResponse>(this.moviesUrl).pipe(
       map((data: DbResponse) => {
         if (!data.movies || !Array.isArray(data.movies)) {
           console.error("No se encontraron películas");
@@ -31,9 +30,8 @@ export class MovieService {
     );
   }
 
-
- getMovieById(id: string): Observable<Movie | {}> {
-    return this.http.get<DbResponse>(this.baseUrl).pipe(
+  getMovieById(id: string): Observable<Movie | {}> {
+    return this.http.get<DbResponse>(this.moviesUrl).pipe(
       map((data: DbResponse) => {
         const movies = data.movies || [];
         const foundMovie = movies.find(movie => movie.id === id);
