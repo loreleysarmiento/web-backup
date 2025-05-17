@@ -39,8 +39,8 @@ export class ReviewService {
               const movie = movies[index] as Movie;
               return {
                 ...review,
-                contenidoTitulo: movie.titulo || 'Desconocido',
-                contenidoImagen: movie.imagen || ''
+                contenidoTitulo: movie instanceof Movie ? movie.titulo : 'Desconocido',
+                contenidoImagen: movie instanceof Movie ? movie.imagen : ''
               };
             });
           })
