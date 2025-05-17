@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {environment} from '../../../../environments/environment';
 import {map} from 'rxjs/operators';
-import { Movie } from '../../model/movie.entity';
+import { Movie } from '../model/movie.entity';
 
 interface DbResponse {
   movies: Movie[];
