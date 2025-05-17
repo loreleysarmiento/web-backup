@@ -8,11 +8,11 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class UserService extends BaseService<User> {
-  private localApiUrl = 'http://localhost:3000/users';
+  private staticApiUrl = 'https://fake-api-raje.vercel.app/users';
 
   constructor() {
     super();
-    this.resourceEndpoint = this.localApiUrl;
+    this.resourceEndpoint = this.staticApiUrl;
   }
 
   registerUser(user: User): Observable<User> {
@@ -20,13 +20,13 @@ export class UserService extends BaseService<User> {
   }
 
   getUserById(userId: string): Observable<User> {
-    const url = this.localApiUrl;
+    const url = this.staticApiUrl;
 
     console.log("User URL:", url);
 
-    return this.http.get<User[]>(url).pipe(
-      map((users) => {
-        const user = users.find(user => user.id.toString() === userId);
+    return this.http.get<{ users: User[] }>(url).pipe(
+      map((data) => {
+        const user = data.users.find(user => user.id.toString() === userId);
         if (user) {
           console.log("User found:", user);
           return user;
