@@ -13,20 +13,20 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string): Observable<User | null> {
+  login(username: string, password: string): Observable<User | null> {
     const url = this.usersUrl;
     console.log("Login URL:", url);
 
     return this.http.get<{ users: User[] }>(url).pipe(
       map((data) => {
-        const foundUser = data.users.find(user => user.email === email && user.password === password);
+        const foundUser = data.users.find(user => user.userName === username && user.password === password);
         if (foundUser) {
           console.log("User authenticated:", foundUser);
           // Guarda el usuario en el localStorage
           localStorage.setItem('currentUser', JSON.stringify(foundUser));
           return foundUser;
         }
-        console.warn("Login failed for email:", email);
+        console.warn("Login failed for username:", username);
         return null;
       })
     );
