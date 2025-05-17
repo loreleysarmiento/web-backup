@@ -5,11 +5,10 @@ import { Observable, forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Review } from '../model/review.entity';
-import { Movie } from '../../contents/movies/model/movie.entity';
+import { MovieService } from '../../contents/movies/services/movie.service';
 
 interface DbResponse {
   reviews: Review[];
-  movies: Movie[];
 }
 
 @Injectable({
@@ -17,9 +16,8 @@ interface DbResponse {
 })
 export class ReviewService {
   private reviewsUrl = environment.reviewEndPointPath;
-  private moviesUrl = environment.movieEndpointPath;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private movieService: MovieService) {}
 
   getReviewsByUserId(userId: string): Observable<Review[]> {
     return this.http.get<DbResponse>(this.reviewsUrl).pipe(
@@ -30,7 +28,9 @@ export class ReviewService {
   getEnrichedReviews(userId: string): Observable<any[]> {
     return this.getReviewsByUserId(userId).pipe(
       switchMap(reviews => {
-        const contentRequests = reviews.map(review => this.getMovieById(review.contenidoId));
+        const contentRequests = reviews.map(review =>
+          this.movieService.getMovieById(review.contenidoId)  // Usando MovieService
+        );
 
         return forkJoin(contentRequests).pipe(
           map((movies) => {
@@ -38,19 +38,13 @@ export class ReviewService {
               const movie = movies[index];
               return {
                 ...review,
-                contenidoTitulo: movie.titulo,
-                contenidoImagen: movie.imagen
+                contenidoTitulo: movie instanceof Object ? movie.titulo : 'Desconocido',
+                contenidoImagen: movie instanceof Object ? movie.imagen : ''
               };
             });
           })
         );
       })
-    );
-  }
-
-  getMovieById(id: string): Observable<Movie> {
-    return this.http.get<DbResponse>(this.moviesUrl).pipe(
-      map((data) => data.movies.find(movie => movie.id === id) || {})
     );
   }
 
