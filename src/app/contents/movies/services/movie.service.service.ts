@@ -3,6 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {environment} from '../../../../environments/environment';
 import {map} from 'rxjs/operators';
+import { Movie } from '../../model/movie.entity';
+
+interface DbResponse {
+  movies: Movie[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -12,25 +17,27 @@ export class MovieService {
 
   constructor(private http: HttpClient) {}
 
-  getMovies(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl).pipe(
-      map(data => {
-        // Verifica que "movies" exista en la respuesta
+
+  getMovies(): Observable<Movie[]> {
+    return this.http.get<DbResponse>(this.baseUrl).pipe(
+      map((data: DbResponse) => {
         if (!data.movies || !Array.isArray(data.movies)) {
           console.error("No se encontraron películas");
           return [];
         }
-        return data.movies;
+        // Convierte los objetos en instancias de Movie
+        return data.movies.map(movie => new Movie(movie));
       })
     );
   }
 
-  getMovieById(id: string): Observable<any> {
-    return this.http.get<any[]>(this.baseUrl).pipe(
-      map(data => {
-        // Busca la película por ID
+
+ getMovieById(id: string): Observable<Movie | {}> {
+    return this.http.get<DbResponse>(this.baseUrl).pipe(
+      map((data: DbResponse) => {
         const movies = data.movies || [];
-        return movies.find(movie => movie.id.toString() === id) || {};
+        const foundMovie = movies.find(movie => movie.id === id);
+        return foundMovie ? new Movie(foundMovie) : {};
       })
     );
   }
