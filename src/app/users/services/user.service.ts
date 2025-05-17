@@ -19,17 +19,19 @@ export class UserService extends BaseService<User> {
   }
 
   getUserById(userId: string): Observable<User> {
-    const url = `${environment.serverBaseUrl}${environment.userEndpointPath}/${userId}`;
+    const url = `${environment.serverBaseUrl}${environment.userEndpointPath}`;
+
     console.log("User URL:", url);
 
-    return this.http.get<User>(url).pipe(
-      map((user: User) => {
+    return this.http.get<{ users: User[] }>(url).pipe(
+      map((data) => {
+        const user = data.users.find(user => user.id.toString() === userId);
         if (user) {
           console.log("User found:", user);
           return user;
         }
         console.warn("No user found for ID:", userId);
-        return {} as User;  // Retorna un usuario vacío si no se encuentra
+        return {} as User;  
       })
     );
   }
