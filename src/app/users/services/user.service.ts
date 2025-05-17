@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '../../shared/services/base.service';
 import { User } from '../model/user.entity';
+import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -8,11 +9,11 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class UserService extends BaseService<User> {
-  private staticApiUrl = 'https://fake-api-raje.vercel.app/users';
+  private usersPath = environment.userEndpointPath;
 
   constructor() {
     super();
-    this.resourceEndpoint = this.staticApiUrl;
+    this.resourceEndpoint = this.usersPath;
   }
 
   registerUser(user: User): Observable<User> {
@@ -20,7 +21,7 @@ export class UserService extends BaseService<User> {
   }
 
   getUserById(userId: string): Observable<User> {
-    const url = this.staticApiUrl;
+    const url = this.usersPath;
 
     console.log("User URL:", url);
 
