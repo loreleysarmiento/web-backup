@@ -9,6 +9,6 @@ export const environment = {
   authorEndpointPath:/db.json,
   movieEndpointPath:/db.json,
   bookEndpointPath:/db.json,
-  serieEndpointPath: /db.json,
+  serieEndpointPath:/db.json,
   reviewEndPointPath:/db.json,
 };
