@@ -18,7 +18,7 @@ export class SerieService {
   constructor(private http: HttpClient) {}
 
   // Obtener todas las series
-  getAllSeries(): Observable<Serie[]> {
+  getSeries(): Observable<Serie[]> {
     return this.http.get<DbResponse>(this.baseUrl).pipe(
       map((data) => data.series || [])
     );
