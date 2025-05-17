@@ -1,0 +1,19 @@
+.author-card {
+  width: 120px;
+  text-align: center;
+  margin: 5px;
+}
+
+.author-card img {
+  width: 90px;
+  height: 90px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 5px;
+}
+
+.author-card p {
+  font-size: 14px;
+  color: #fff;
+  margin: 0;
+}

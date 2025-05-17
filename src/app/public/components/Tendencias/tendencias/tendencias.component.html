@@ -1,0 +1,51 @@
+<div class="trending-container">
+  <h1 class="main-title">TENDENCIAS</h1>
+
+  <!-- PELÍCULAS -->
+  <div class="trending-row">
+    <div class="category-label">TOP PELÍCULAS</div>
+    <div class="trending-items-horizontal">
+      <ng-container *ngFor="let item of mixedContent">
+        <div *ngIf="isMovie(item)" class="trending-horizontal-card">
+          <img [src]="item.imagen" alt="{{ item.titulo }}" class="horizontal-image">
+          <div class="horizontal-text">
+            <div class="horizontal-title">{{ item.titulo }}</div>
+            <div class="horizontal-genre">{{ item.genero }}</div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- SERIES -->
+  <div class="trending-row">
+    <div class="category-label">TOP SERIES</div>
+    <div class="trending-items-horizontal">
+      <ng-container *ngFor="let item of mixedContent">
+        <div *ngIf="isSerie(item)" class="trending-horizontal-card">
+          <img [src]="item.imagen" alt="{{ item.titulo }}" class="horizontal-image">
+          <div class="horizontal-text">
+            <div class="horizontal-title">{{ item.titulo }}</div>
+            <div class="horizontal-genre">{{ item.genero }}</div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- LIBROS -->
+  <div class="trending-row">
+    <div class="category-label">TOP LIBROS</div>
+    <div class="trending-items-horizontal">
+      <ng-container *ngFor="let item of mixedContent">
+        <div *ngIf="isBook(item)" class="trending-horizontal-card">
+          <img [src]="item.imagen" alt="{{ item.titulo }}" class="horizontal-image">
+          <div class="horizontal-text">
+            <div class="horizontal-title">{{ item.titulo }}</div>
+            <div class="horizontal-genre">{{ item.genero }}</div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
