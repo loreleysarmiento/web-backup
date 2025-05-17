@@ -5,7 +5,7 @@ import { Observable, forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Review } from '../model/review.entity';
-import { MovieService } from '../../contents/movies/services/movie.service';
+import{MovieService} from '../../contents/movies/services/movie.service.service';
 import { Movie } from '../../contents/movies/model/movie.entity';
 
 interface DbResponse {
