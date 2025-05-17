@@ -1,8 +1,7 @@
 {
   "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "/public/db.json"
-    }
+    { "source": "/api/platforms", "destination": "/public/db.json" },
+    { "source": "/api/movies", "destination": "/public/db.json" },
+    { "source": "/api/:path*", "destination": "/public/db.json" }
   ]
 }
