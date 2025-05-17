@@ -1,7 +1,6 @@
 export const environment = {
   production: false,
-  // Server Base URL for Rest API
-  serverBaseUrl: 'http://localhost:3000',
+  serverBaseUrl: '/api',
   userEndpointPath: '/users',
   platformEndpointPath: '/platforms',
   directorEndpointPath: '/directors',
